@@ -21,7 +21,7 @@
 namespace PrestaShop\Module\PrestashopCheckout\Api\Payment\Client;
 
 use GuzzleHttp\Client;
-use PrestaShop\AccountsAuth\Api\Firebase\Token;
+use PrestaShop\AccountsAuth\Service\PsAccountsService;
 use PrestaShop\Module\PrestashopCheckout\Api\GenericClient;
 use PrestaShop\Module\PrestashopCheckout\Environment\PaymentEnv;
 use PrestaShop\Module\PrestashopCheckout\ShopContext;
@@ -48,7 +48,7 @@ class PaymentClient extends GenericClient
                     'headers' => [
                         'Content-Type' => 'application/vnd.checkout.v1+json', // api version to use (psl side)
                         'Accept' => 'application/json',
-                        'Authorization' => 'Bearer ' . (new Token())->getToken((int) $context->shop->id),
+                        'Authorization' => 'Bearer ' . (new PsAccountsService())->getOrRefreshToken(),
                         'Shop-Id' => (new ShopUuidManager())->getForShop((int) $context->shop->id),
                         'Hook-Url' => $this->link->getModuleLink(
                             'ps_checkout',

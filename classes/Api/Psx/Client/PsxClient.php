@@ -21,7 +21,7 @@
 namespace PrestaShop\Module\PrestashopCheckout\Api\Client;
 
 use GuzzleHttp\Client;
-use PrestaShop\AccountsAuth\Api\Firebase\Token;
+use PrestaShop\AccountsAuth\Service\PsAccountsService;
 use PrestaShop\Module\PrestashopCheckout\Api\GenericClient;
 use PrestaShop\Module\PrestashopCheckout\Environment\PsxEnv;
 use PrestaShop\Module\PrestashopCheckout\ShopUuidManager;
@@ -40,7 +40,7 @@ class PsxClient extends GenericClient
                 'headers' => [
                     'Content-Type' => 'application/vnd.psx.v1+json', // api version to use (psl side)
                     'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . (new Token())->getToken((int) $context->shop->id),
+                    'Authorization' => 'Bearer ' . (new PsAccountsService())->getOrRefreshToken(),
                     'Shop-Id' => (new ShopUuidManager())->getForShop((int) $context->shop->id),
                     'Module-Version' => \Ps_checkout::VERSION, // version of the module
                     'Prestashop-Version' => _PS_VERSION_, // prestashop version
